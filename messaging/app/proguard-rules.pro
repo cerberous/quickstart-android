@@ -18,3 +18,6 @@
 
 -keepattributes EnclosingMethod
 -keepattributes InnerClasses
+-dontwarn javax.annotation**
+-dontwarn java.nio.file**
+-dontwarn org.codehaus.mojo.animal_sniffer**

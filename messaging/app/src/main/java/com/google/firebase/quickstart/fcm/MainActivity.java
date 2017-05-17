@@ -38,10 +38,7 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private static final String LEGACY_SERVER_KEY = "AIzaSyD7q8WziubAnYdNY3vjChaim-6bS4iSz3c";
-    // esse registration token deve ser o token do app destinatario da mensagem, atualmente está pegando do aplicativo atual
-    // isso deve ser pego no aplicativo client e guardado nas informações ddo usuário do AVD manager
-    private String regToken;
+    private static final String LEGACY_SERVER_KEY = "AAAA_bwTQSM:APA91bGdqtRrHqC2qA3rytozXMA-TYoS2H4XTJw1s9YZMyuuP9I0UqrEKLCMCrlWcMvolFsvyMPmlsH9lGrYGlBFGU-XFGMY_sjCS1qigfpG_TJYi2Po4xMSmPyCr5rvGqU0234EIHDT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 // Log and toast
                 String msg = getString(R.string.msg_subscribed);
                 Log.d(TAG, msg);
-                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -85,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Get regToken
-                regToken = FirebaseInstanceId.getInstance().getToken();
+                String regToken = FirebaseInstanceId.getInstance().getToken();
 
                 // Log and toast
                 String msg = getString(R.string.msg_token_fmt, regToken);
@@ -95,14 +92,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public static final MediaType JSON
-            = MediaType.parse("application/json; charset=utf-8");
-
     /**
      * Metodo pego desse link:http://stackoverflow.com/questions/37435750/how-to-send-device-to-device-messages-using-firebase-cloud-messaging </br>
      * Para enviar mensagens entre apps
-     * @param reg_token
+     *
+     * @param reg_token sse registration token deve ser o token do app destinatario da mensagem, atualmente está pegando do aplicativo atual
+     * isso deve ser pego no aplicativo client e guardado nas informações ddo usuário do AVD manager
      */
+    public static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
+
     private void sendNotification(final String reg_token) {
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -113,10 +112,8 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject dataJson = new JSONObject();
                     dataJson.put("body", "Hi this is sent from device to device");
                     dataJson.put("title", "dummy title");
-                    json.put("notification", dataJson);
-                    json.put("to",
-
-                            regToken );
+//                    json.put("notification", dataJson);
+                    json.put("to", reg_token);
                     RequestBody body = RequestBody.create(JSON, json.toString());
                     Request request = new Request.Builder()
                             .header("Authorization", "key=" + LEGACY_SERVER_KEY)
@@ -125,13 +122,23 @@ public class MainActivity extends AppCompatActivity {
                             .build();
                     Response response = client.newCall(request).execute();
                     String finalResponse = response.body().string();
+                    Log.d(TAG, finalResponse);
+
                 } catch (Exception e) {
-                    Log.d(TAG, e + "");
+                    Log.d(TAG, "", e);
                 }
                 return null;
             }
         }.execute();
 
+    }
+
+    public void sendNotificationAction(View view) {
+        try {
+            sendNotification("ep10_H40ubk:APA91bFCPJH66T70kF-xJNI6cqxn39WOKCGzqJrttxxy35kkjNTy16EsmTaTquc3AzN4wlGDNF1TLs_qHibPzgYV61kRqOe33f6F3v0uFeFvsFFVA0ORHMbiHtc1EsycfCtBiqLaaoQV");
+        } catch (Exception ex) {
+            Log.d(TAG, "", ex);
+        }
     }
 
 }

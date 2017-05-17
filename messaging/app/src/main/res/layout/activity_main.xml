@@ -12,8 +12,8 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
         android:src="@drawable/firebase_lockup_400" />
 
     <TextView
@@ -38,5 +38,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/log_token" />
+
+    <Button
+        android:id="@+id/sendNotification"
+        android:layout_width="@dimen/standard_field_width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:onClick="sendNotificationAction"
+        android:text="@string/sendNotification" />
 
 </LinearLayout>
